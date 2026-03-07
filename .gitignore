@@ -1,0 +1,15 @@
+# Docker
+.docker/
+data/
+
+# Logs
+logs/*.log
+!logs/.gitkeep
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+*.swp

@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  # Load Balancer
+  nginx-lb:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./logs:/var/log/nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      web-app:
+        condition: service_healthy
+
+  # Backend Apps
+  web-app:
+    image: nginx:alpine
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    # image: nginxdemos/hello
+    deploy:
+      replicas: 3
