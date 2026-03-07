@@ -9,26 +9,30 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .card { background: var(--card); padding: 2.5rem; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); text-align: center; max-width: 450px; border: 1px solid #334155; }
         h1 { color: var(--accent); margin-top: 0; font-size: 1.8rem; }
+        .ip-box { background: #0ea5e920; padding: 10px; border-radius: 8px; color: #fbbf24; font-family: monospace; font-size: 1.2rem; margin: 15px 0; border: 1px dashed #fbbf24; }
         p { color: #94a3b8; line-height: 1.6; }
-        .instruction { background: #0ea5e920; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--accent); text-align: left; margin-top: 1.5rem; }
-        code { color: var(--accent); font-family: monospace; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>Nginx Load Balancer</h1>
-        <p>Proyek ini mensimulasikan pendistribusian trafik ke beberapa kontainer backend secara <b>Round Robin</b>.</p>
+        <p>Permintaan Anda dilayani oleh Backend IP:</p>
         
-        <div class="instruction">
-            <strong>Cara Verifikasi:</strong>
-            <ol style="font-size: 0.9rem; padding-left: 20px;">
-                <li>Buka Inspect Element (F12)</li>
-                <li>Pilih tab <b>Network</b></li>
-                <li>Refresh halaman</li>
-                <li>Klik nama file (localhost) dan cek <b>Response Headers</b></li>
-                <li>Cari <code>X-Backend-Server</code></li>
-            </ol>
-        </div>
+        <div id="backend-ip" class="ip-box">Loading...</div>
+
+        <p style="font-size: 0.8rem;">(Refresh halaman untuk melihat perubahan IP)</p>
     </div>
+
+    <script>
+        // Mengambil header dari response halaman ini sendiri
+        fetch(window.location.href)
+            .then(response => {
+                const backendIp = response.headers.get('X-Backend-Server');
+                document.getElementById('backend-ip').innerText = backendIp || "IP Tidak Terdeteksi";
+            })
+            .catch(err => {
+                document.getElementById('backend-ip').innerText = "Error fetching header";
+            });
+    </script>
 </body>
 </html>
