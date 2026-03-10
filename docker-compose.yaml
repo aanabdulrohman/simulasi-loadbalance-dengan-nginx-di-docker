@@ -3,7 +3,7 @@ version: '3'
 services:
   # Load Balancer
   nginx-lb:
-    build: .
+    image: aanabdulrohman/nginx-loadbalancer:latest
     volumes:
       - ./logs:/var/log/nginx
     ports:
