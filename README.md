@@ -1,23 +1,40 @@
-# Nginx Load Balancing Simulation with Docker
+# 🚀 Nginx Load Balancer with Automated CI/CD & GitOps
 
-Proyek ini adalah simulasi infrastruktur **High Availability** menggunakan **Nginx** sebagai Load Balancer dan **Docker Compose** untuk orkestrasi kontainer. Proyek ini dirancang untuk menunjukkan pemahaman tentang distribusi trafik, *health checking*, dan *observability* dalam lingkungan DevOps.
+Proyek ini mendemonstrasikan implementasi infrastruktur modern yang berfokus pada **High Availability** dan **Automated Deployment**. Bukan sekadar load balancer biasa, proyek ini telah diintegrasikan dengan pipeline CI/CD penuh menggunakan prinsip GitOps.
 
+## 🏗️ Architecture Overview
 
+Sistem ini dirancang dengan alur kerja otomatis sebagai berikut:
+1. **Developer** melakukan `git push` kode terbaru ke GitHub.
+2. **GitHub Actions** mendeteksi perubahan, lalu menjalankan proses:
+   - **Linting & Testing** (Memastikan konfigurasi valid).
+   - **Build Docker Image** (Membungkus aplikasi menjadi kontainer).
+   - **Push to Registry** (Mengirim image ke Docker Hub).
+3. **Watchtower (CD Agent)** di server memantau Docker Hub secara real-time.
+4. **Automated Deployment**: Watchtower mendeteksi image baru, menariknya (pull), dan melakukan *restart* kontainer secara otomatis tanpa intervensi manual.
+
+## 🛠️ Tech Stack
+
+- **Load Balancer:** Nginx
+- **Containerization:** Docker & Docker Compose
+- **CI Tool:** GitHub Actions
+- **Registry:** Docker Hub
+- **CD Agent:** Watchtower (GitOps approach)
+- **Security:** GitHub Secrets for Credential Management
 
 ## 🚀 Fitur Utama
 
-* **Round Robin Load Balancing**: Mendistribusikan trafik secara merata ke beberapa replika backend.
-* **Health Checks**: Memastikan trafik hanya dikirim ke kontainer yang sehat.
-* **Custom Logging**: Format log kustom untuk memantau aktivitas *upstream server*.
-* **Visibility**: Header HTTP kustom (`X-Backend-Server`) untuk melacak server mana yang melayani permintaan.
-* **Infrastructure as Code**: Seluruh setup didefinisikan dalam file konfigurasi yang mudah dikelola.
+- **Load Balancing:** Distribusi trafik ke beberapa backend server untuk skalabilitas.
+- **Automated Pipeline:** Automasi penuh dari kode hingga deployment (CI/CD).
+- **Security Best Practices:** Menggunakan GitHub Secrets untuk mengamankan kredensial Docker Hub.
+- **Self-Healing & Auto-Update:** Sistem otomatis memperbarui dirinya sendiri ketika ada versi terbaru di registry.
 
-## 🏗️ Arsitektur
-Trafik masuk melalui port `8080` pada host, diterima oleh Nginx Load Balancer, lalu diteruskan ke salah satu dari 3 replika kontainer backend (Nginx-Alpine).
+## ⚙️ Cara Menjalankan
 
-```text
-User Request (8080) -> [ Nginx Load Balancer ]
-                             |
-              -------------------------------
-              |              |              |
-      [ Backend 1 ]    [ Backend 2 ]    [ Backend 3 ]
+### 1. Prasyarat
+- Docker & Docker Compose terinstal.
+- Akun Docker Hub.
+
+### 2. Menjalankan Aplikasi & Load Balancer
+```bash
+docker-compose up -d
